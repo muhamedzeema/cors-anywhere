@@ -22,9 +22,8 @@ var checkRateLimit = require('./lib/rate-limit')(process.env.CORSANYWHERE_RATELI
 var cors_proxy = require('./lib/cors-anywhere');
 cors_proxy.createServer({
   originBlacklist: originBlacklist,
-  originWhitelist: originWhitelist,
-  requireHeader: ['origin', 'x-requested-with'],
-  originWhitelist: ['http://localhost:3000','http://localhost:3001', 'https://staging-app.bleap.finance','https://app.bleap.finance'],
+  originWhitelist: [], // Allow all origins
+  requireHeader: [], // Disable origin and x-requested-with requirement
   checkRateLimit: checkRateLimit,
   removeHeaders: [
     'cookie',
