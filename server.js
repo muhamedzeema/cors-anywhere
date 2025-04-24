@@ -23,7 +23,8 @@ var cors_proxy = require('./lib/cors-anywhere');
 cors_proxy.createServer({
   originBlacklist: originBlacklist,
   originWhitelist: originWhitelist,
-  // requireHeader: ['origin', 'x-requested-with'],
+  requireHeader: ['origin', 'x-requested-with'],
+  originWhitelist: ['http://localhost:3000','http://localhost:3001', 'https://staging-app.bleap.finance','https://app.bleap.finance'],
   checkRateLimit: checkRateLimit,
   removeHeaders: [
     'cookie',
