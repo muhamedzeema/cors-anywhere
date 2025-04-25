@@ -22,8 +22,8 @@ var checkRateLimit = require('./lib/rate-limit')(process.env.CORSANYWHERE_RATELI
 var cors_proxy = require('./lib/cors-anywhere');
 cors_proxy.createServer({
   originBlacklist: originBlacklist,
-  originWhitelist: originWhitelist,
-  requireHeader: ['origin', 'x-requested-with'],
+  originWhitelist: [],
+  requireHeader: [],
   checkRateLimit: checkRateLimit,
   removeHeaders: [
     'cookie',
@@ -39,6 +39,22 @@ cors_proxy.createServer({
     // 'x-forwarded-proto',
     // 'x-forwarded-port',
   ],
+  setHeaders: {
+    // Optional: return this origin to the browser
+    "access-control-allow-origin": "*",
+  },
+  interceptRequest: (req, res, proxyRequest) => {
+    // Force change the origin sent to the real API
+    proxyRequest.setHeader("Origin", "https://app.bleap.finance");
+
+    // Optional: copy device headers if needed
+    if (req.headers["device_uuid"]) {
+      proxyRequest.setHeader("device_uuid", req.headers["device_uuid"]);
+    }
+
+    // You can log to verify:
+    console.log("Proxying with Origin:", proxyRequest.getHeader("Origin"));
+  },
   redirectSameOrigin: true,
   httpProxyOptions: {
     // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
